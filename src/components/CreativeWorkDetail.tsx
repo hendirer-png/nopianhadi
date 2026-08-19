@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { creativeWorksApi } from '../lib/api/creativeWorks';
 import { CreativeWork } from '../lib/supabase';
 import { PlayCircle, ExternalLink } from 'lucide-react';
+import { getVideoEmbedUrl } from '../utils/videoUtils';
 
 const CreativeWorkDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,7 @@ const CreativeWorkDetail: React.FC = () => {
   const [work, setWork] = useState<CreativeWork | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     const fetchWork = async () => {
@@ -116,28 +118,78 @@ const CreativeWorkDetail: React.FC = () => {
 
         {/* Main Content Area */}
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-12">
-          {/* Main Image */}
+          {/* Main Image or Video */}
           <div className="relative">
-            <img src={work.image} alt={work.title} className="w-full object-cover" />
-            
-            {/* Video Action Button Overlay */}
-            {work.video_url && (
-              <a
-                href={work.video_url}
-                target="_blank"
-                rel="noreferrer"
-                className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group"
-              >
-                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 transition-transform shadow-2xl">
-                  <PlayCircle className="w-10 h-10 text-white fill-white/40" />
-                </div>
-              </a>
+            {work.video_url && showVideo ? (
+              // Video Embed
+              <div className="aspect-video">
+                {getVideoEmbedUrl(work.video_url) ? (
+                  <iframe
+                    src={getVideoEmbedUrl(work.video_url)!}
+                    title={work.title}
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allowFullScreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+                ) : (
+                  // Fallback for invalid video URLs
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="text-center">
+                      <p className="text-gray-500 mb-4">Video tidak dapat dimuat</p>
+                      <a
+                        href={work.video_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-red-700 transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Buka Video
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Image with Play Button Overlay
+              <>
+                <img src={work.image} alt={work.title} className="w-full object-cover" />
+                
+                {/* Video Play Button Overlay */}
+                {work.video_url && (
+                  <button
+                    onClick={() => setShowVideo(true)}
+                    className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group"
+                  >
+                    <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 transition-transform shadow-2xl">
+                      <PlayCircle className="w-10 h-10 text-white fill-white/40" />
+                    </div>
+                  </button>
+                )}
+              </>
             )}
           </div>
 
-          {/* Additional info or video link */}
+          {/* Video Controls */}
           {work.video_url && (
-            <div className="p-6 md:p-8 flex justify-center border-t border-gray-100">
+            <div className="p-6 md:p-8 flex flex-col sm:flex-row gap-4 justify-center items-center border-t border-gray-100">
+              {!showVideo ? (
+                <button
+                  onClick={() => setShowVideo(true)}
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25 hover:scale-105 transform duration-200"
+                >
+                  <PlayCircle className="w-5 h-5" />
+                  Putar Video di Sini
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowVideo(false)}
+                  className="inline-flex items-center gap-2 bg-gray-600 text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-gray-700 transition-colors shadow-lg shadow-gray-500/25 hover:scale-105 transform duration-200"
+                >
+                  Tampilkan Gambar
+                </button>
+              )}
+              
               <a
                 href={work.video_url}
                 target="_blank"
@@ -145,7 +197,7 @@ const CreativeWorkDetail: React.FC = () => {
                 className="inline-flex items-center gap-2 bg-red-600 text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-500/25 hover:scale-105 transform duration-200"
               >
                 <ExternalLink className="w-5 h-5" />
-                Buka Video di Tab Baru
+                Buka di Tab Baru
               </a>
             </div>
           )}
