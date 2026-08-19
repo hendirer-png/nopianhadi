@@ -115,6 +115,7 @@ export interface CreativeWork {
   category: string;
   image: string;
   video_url?: string;
+  images?: string[];
   status: 'Published' | 'Draft';
   created_at?: string;
   updated_at?: string;

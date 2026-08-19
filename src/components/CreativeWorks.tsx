@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { PlayCircle, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { PlayCircle } from 'lucide-react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { creativeWorksApi } from '../lib/api/creativeWorks';
 import { CreativeWork } from '../lib/supabase';
 
 const CreativeWorks: React.FC = () => {
+  const navigate = useNavigate();
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
   const [works, setWorks] = useState<CreativeWork[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<'All' | 'Design' | 'Video'>('All');
-  const [lightboxWork, setLightboxWork] = useState<CreativeWork | null>(null);
 
   useEffect(() => {
     creativeWorksApi.getPublished()
@@ -20,7 +21,7 @@ const CreativeWorks: React.FC = () => {
 
   const filtered = works.filter(w => activeFilter === 'All' || w.category === activeFilter);
 
-  if (!loading && works.length === 0) return null;
+  // if (!loading && works.length === 0) return null;
 
   return (
     <section
@@ -63,6 +64,10 @@ const CreativeWorks: React.FC = () => {
               <div key={i} className="aspect-square bg-gray-200 rounded-2xl animate-pulse" />
             ))}
           </div>
+        ) : filtered.length === 0 ? (
+          <div className="py-12 text-center text-gray-500 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <p>Belum ada karya untuk kategori ini.</p>
+          </div>
         ) : (
           <div className="columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4 space-y-3 md:space-y-4">
             {filtered.map((work, index) => (
@@ -70,7 +75,7 @@ const CreativeWorks: React.FC = () => {
                 key={work.id}
                 className={`break-inside-avoid group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 ease-out ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                 style={{ transitionDelay: `${index * 60}ms` }}
-                onClick={() => setLightboxWork(work)}
+                onClick={() => navigate(`/creative-work/${work.id}`)}
               >
                 <img
                   src={work.image}
@@ -99,63 +104,6 @@ const CreativeWorks: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* Lightbox Modal */}
-      {lightboxWork && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8" onClick={() => setLightboxWork(null)}>
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-md" />
-          <div
-            className="relative bg-white rounded-3xl overflow-hidden max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
-            onClick={e => e.stopPropagation()}
-          >
-            {/* Close */}
-            <button
-              onClick={() => setLightboxWork(null)}
-              className="absolute top-4 right-4 z-10 w-9 h-9 bg-black/40 backdrop-blur-sm text-white rounded-full flex items-center justify-center hover:bg-black/60 transition-colors text-sm font-bold"
-            >
-              ✕
-            </button>
-
-            {/* Image */}
-            <div className="relative">
-              <img src={lightboxWork.image} alt={lightboxWork.title} className="w-full object-cover max-h-[65vh]" />
-              {lightboxWork.video_url && (
-                <a
-                  href={lightboxWork.video_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group"
-                >
-                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 transition-transform">
-                    <PlayCircle className="w-10 h-10 text-white fill-white/40" />
-                  </div>
-                </a>
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="p-6 md:p-8 flex items-start justify-between gap-4">
-              <div>
-                <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 ${lightboxWork.category === 'Design' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                  {lightboxWork.category === 'Design' ? 'Desain Grafis' : 'Video Editing'}
-                </span>
-                <h3 className="text-xl md:text-2xl font-black text-gray-900">{lightboxWork.title}</h3>
-              </div>
-              {lightboxWork.video_url && (
-                <a
-                  href={lightboxWork.video_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-shrink-0 flex items-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-red-700 transition-colors shadow-lg shadow-red-500/25"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Buka Video
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 };

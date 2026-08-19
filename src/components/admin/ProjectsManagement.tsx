@@ -189,7 +189,6 @@ const ProjectsManagement: React.FC = () => {
 
   const tabs = [
     { id: 'basic', label: 'Info Dasar', icon: Info },
-    { id: 'content', label: 'Konten', icon: Type },
     { id: 'media', label: 'Media', icon: ImageIcon },
     { id: 'extra', label: 'Tambahan', icon: Star },
   ];
@@ -376,16 +375,6 @@ const ProjectsManagement: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-3 ml-1">Klien *</label>
-                      <input
-                        type="text"
-                        value={formData.client}
-                        onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-                        className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-red-500 transition-all outline-none font-medium"
-                        required
-                      />
-                    </div>
-                    <div>
                       <label className="block text-sm font-bold text-gray-700 mb-3 ml-1">Kategori *</label>
                       <select
                         value={formData.category}
@@ -394,12 +383,9 @@ const ProjectsManagement: React.FC = () => {
                         required
                       >
                         <option value="">Pilih Kategori</option>
-                        <option value="Web Application">Web Application</option>
-                        <option value="Web Portal">Web Portal</option>
-                        <option value="Nonprofit Website">Nonprofit Website</option>
-                        <option value="Portfolio Website">Portfolio Website</option>
-                        <option value="Company Profile">Company Profile</option>
-                        <option value="Company Website">Company Website</option>
+                        <option value="Website">Website</option>
+                        <option value="Desain Grafis">Desain Grafis</option>
+                        <option value="Video Editing">Video Editing</option>
                       </select>
                     </div>
                     <div>
@@ -427,42 +413,7 @@ const ProjectsManagement: React.FC = () => {
                   </div>
                 )}
 
-                {activeTab === 'content' && (
-                  <div className="space-y-8">
-                    <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-3 ml-1">Ringkasan Proyek *</label>
-                      <textarea
-                        value={formData.overview}
-                        onChange={(e) => setFormData({ ...formData, overview: e.target.value })}
-                        rows={4}
-                        className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-red-500 transition-all outline-none font-medium resize-none"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-3 ml-1">Tantangan *</label>
-                        <textarea
-                          value={formData.challenge}
-                          onChange={(e) => setFormData({ ...formData, challenge: e.target.value })}
-                          rows={4}
-                          className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-red-500 transition-all outline-none font-medium resize-none"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-bold text-gray-700 mb-3 ml-1">Solusi *</label>
-                        <textarea
-                          value={formData.solution}
-                          onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
-                          rows={4}
-                          className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-red-500 transition-all outline-none font-medium resize-none"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
+
 
                 {activeTab === 'media' && (
                   <div className="space-y-8">
@@ -492,34 +443,7 @@ const ProjectsManagement: React.FC = () => {
                         )}
                       </div>
                     </div>
-                    
-                    <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-3 ml-1">Upload Galeri Proyek (Bisa Pilih Banyak) *</label>
-                      <div className="flex items-center gap-4 mb-4">
-                        <input
-                          type="file" accept="image/*" multiple
-                          onChange={handleGalleryUpload}
-                          disabled={isUploadingGallery}
-                          className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 transition-all cursor-pointer"
-                        />
-                        {isUploadingGallery && <Loader2 className="w-5 h-5 text-red-500 animate-spin" />}
-                      </div>
-                      
-                      {formData.images && formData.images.length > 0 && (
-                        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
-                          {formData.images.map((img, idx) => (
-                            <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 group">
-                              <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
-                              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <button type="button" onClick={() => removeGalleryImage(idx)} className="p-2 bg-red-600 text-white rounded-full hover:scale-110 transition-transform">
-                                  <Trash2 size={14} />
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+
                     <div>
                       <label className="block text-sm font-bold text-gray-700 mb-3 ml-1">Video Demo URL (Embed)</label>
                       <input
@@ -551,33 +475,6 @@ const ProjectsManagement: React.FC = () => {
                           value={formData.source_code || ''}
                           onChange={(e) => setFormData({ ...formData, source_code: e.target.value })}
                           className="w-full px-5 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-red-500 transition-all outline-none font-medium"
-                        />
-                      </div>
-                    </div>
-                    <div className="p-8 bg-gray-50 rounded-[2rem] space-y-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Star className="text-orange-400" size={20} fill="currentColor" />
-                        <h4 className="font-bold text-gray-900">Kutipan Testimoni</h4>
-                      </div>
-                      <textarea
-                        placeholder="Apa kata klien tentang proyek ini?"
-                        value={formData.testimonial_quote || ''}
-                        onChange={(e) => setFormData({ ...formData, testimonial_quote: e.target.value })}
-                        className="w-full px-5 py-4 bg-white border border-gray-200 rounded-2xl focus:border-red-500 transition-all outline-none font-medium resize-none"
-                        rows={3}
-                      />
-                      <div className="grid grid-cols-2 gap-4">
-                        <input
-                          placeholder="Nama Penulis"
-                          value={formData.testimonial_author || ''}
-                          onChange={(e) => setFormData({ ...formData, testimonial_author: e.target.value })}
-                          className="px-5 py-3 bg-white border border-gray-200 rounded-2xl focus:border-red-500 transition-all outline-none font-medium"
-                        />
-                        <input
-                          placeholder="Jabatan"
-                          value={formData.testimonial_position || ''}
-                          onChange={(e) => setFormData({ ...formData, testimonial_position: e.target.value })}
-                          className="px-5 py-3 bg-white border border-gray-200 rounded-2xl focus:border-red-500 transition-all outline-none font-medium"
                         />
                       </div>
                     </div>

@@ -16,6 +16,22 @@ export const creativeWorksApi = {
     return data || [];
   },
 
+  // Fetch creative work by id
+  getById: async (id: string): Promise<CreativeWork | null> => {
+    const { data, error } = await supabase
+      .from('creative_works')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error) {
+      console.error('Error fetching creative work by id:', error);
+      return null;
+    }
+    
+    return data;
+  },
+
   // Fetch published creative works only (for public portfolio)
   getPublished: async (): Promise<CreativeWork[]> => {
     const { data, error } = await supabase

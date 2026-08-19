@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS public.creative_works (
   title       TEXT          NOT NULL,
   category    TEXT          NOT NULL DEFAULT 'Design',
   image       TEXT          NOT NULL DEFAULT '',
+  images      TEXT[]        NOT NULL DEFAULT '{}',
   video_url   TEXT,
   status      TEXT          NOT NULL DEFAULT 'Published' CHECK (status IN ('Published', 'Draft')),
   created_at  TIMESTAMPTZ   DEFAULT now(),

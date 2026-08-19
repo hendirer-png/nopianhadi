@@ -6,7 +6,7 @@ import { projectsApi } from '../lib/api/projects';
 import { Project } from '../lib/supabase';
 import { PLACEHOLDER_IMAGES, handleImageError } from '../utils/imageFallback';
 
-const categories = ['Semua', 'Web Application', 'Web Portal', 'Nonprofit Website', 'Portfolio Website', 'Company Profile', 'Company Website'];
+const categories = ['Semua', 'Website', 'Desain Grafis', 'Video Editing'];
 
 const SelectedWork: React.FC = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
@@ -106,13 +106,17 @@ const SelectedWork: React.FC = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
           {displayedProjects.map((project, index) => (
             <div
               key={project.id}
               className={`group relative transition-all duration-600 ease-out cursor-pointer ${shouldShow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
               style={{ transitionDelay: `${index * 80}ms` }}
-              onClick={() => navigate(`/case-study/${project.id}`)}
+              onClick={() => {
+                if (project.live_demo) {
+                  window.open(project.live_demo, '_blank');
+                }
+              }}
             >
               {/* Card container dengan kotak putih yang jelas dan rapi */}
               <div className="relative h-full w-full rounded-lg md:rounded-xl bg-white overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-200 transition-all duration-300 ease-out group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] group-hover:-translate-y-1">
@@ -136,7 +140,7 @@ const SelectedWork: React.FC = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base md:text-2xl font-bold text-gray-900 mb-2 md:mb-3 group-hover:text-red-600 transition-colors">{project.title}</h3>
+                  <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-1 md:mb-3 group-hover:text-red-600 transition-colors line-clamp-2">{project.title}</h3>
                   
                   {/* Overview */}
                   <p className="text-[11px] md:text-base text-gray-600 line-clamp-2 leading-relaxed mb-3 md:mb-4">{project.overview}</p>
@@ -176,17 +180,17 @@ const SelectedWork: React.FC = () => {
                   </div>
 
                   {/* Client & View button */}
-                  <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-1.5 md:gap-2">
-                      <svg className="w-3 h-3 md:w-4 md:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-gray-100 gap-2">
+                    <div className="flex items-center gap-1.5 md:gap-2 min-w-0">
+                      <svg className="w-3 h-3 md:w-4 md:h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
-                      <span className="text-[10px] md:text-sm text-gray-600">
-                        <span className="font-semibold text-gray-900">{project.client}</span>
+                      <span className="text-[10px] md:text-sm text-gray-600 truncate">
+                        <span className="font-semibold text-gray-900">{project.client || 'Klien'}</span>
                       </span>
                     </div>
-                    <div className="inline-flex items-center gap-1 md:gap-1.5 text-[10px] md:text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
-                      Lihat Detail
+                    <div className="inline-flex flex-shrink-0 items-center gap-1 md:gap-1.5 text-[10px] md:text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
+                      Kunjungi Web
                       <svg className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>

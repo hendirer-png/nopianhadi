@@ -81,32 +81,32 @@ const Testimonials: React.FC = () => {
           <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">Apa Kata Rekan Kerja Saya</h2>
           <p className="text-[10px] md:text-sm text-gray-400 mt-1 md:mt-2">({testimonials.length} testimonial dimuat)</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 max-w-7xl mx-auto px-2 md:px-4">
           {testimonials.map((testimonial, index) => {
             return (
               <div 
                 key={testimonial.id} 
-                className="flex flex-col bg-white border border-gray-100 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 opacity-100 translate-y-0 relative group"
+                className="flex flex-col bg-white border border-gray-100 rounded-xl md:rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 opacity-100 translate-y-0 relative group"
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <QuoteIcon className="w-10 h-10 text-gray-100 absolute top-4 right-4 transition-colors duration-300 group-hover:text-red-50"/>
+                <QuoteIcon className="w-6 h-6 md:w-10 md:h-10 text-gray-100 absolute top-3 right-3 md:top-4 md:right-4 transition-colors duration-300 group-hover:text-red-50"/>
                 
-                <div className="flex-grow mb-6 pt-2 relative z-10">
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                <div className="flex-grow mb-4 md:mb-6 pt-1 md:pt-2 relative z-10">
+                  <p className="text-gray-600 text-xs md:text-sm leading-relaxed line-clamp-6">
                     "{testimonial.message}"
                   </p>
                 </div>
 
-                <div className="flex items-center gap-4 mt-auto border-t border-gray-50 pt-4">
+                <div className="flex items-center gap-2 md:gap-4 mt-auto border-t border-gray-50 pt-3 md:pt-4">
                   <img 
                     src={testimonial.image || PLACEHOLDER_IMAGES.testimonial} 
                     alt={testimonial.name} 
-                    className="w-12 h-12 rounded-full object-cover bg-gray-100"
+                    className="w-8 h-8 md:w-12 md:h-12 rounded-full object-cover bg-gray-100 flex-shrink-0"
                     onError={(e) => handleImageError(e, 'testimonial')}
                   />
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-sm group-hover:text-red-500 transition-colors">{testimonial.name}</h3>
-                    <p className="text-gray-500 text-[11px]">{testimonial.position} - {testimonial.company}</p>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-gray-900 text-xs md:text-sm group-hover:text-red-500 transition-colors truncate">{testimonial.name}</h3>
+                    <p className="text-gray-500 text-[9px] md:text-[11px] truncate">{testimonial.position} - {testimonial.company}</p>
                   </div>
                 </div>
               </div>

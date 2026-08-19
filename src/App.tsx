@@ -17,6 +17,7 @@ import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CaseStudyDetail from './components/CaseStudyDetail';
+import CreativeWorkDetail from './components/CreativeWorkDetail';
 import ScrollingBackground3D from './components/ScrollingBackground3D';
 import AdminLogin from './components/admin/AdminLogin';
 import AdminDashboard from './components/admin/AdminDashboard';
@@ -86,13 +87,13 @@ const HomePage: React.FC = () => {
           <Profile />
           <Skills />
           <SelectedWork />
+          <CreativeWorks />
           <Services />
           <VideoIntroduction />
           <Process />
           <AIIntegration />
           <Experience />
           <Testimonials />
-          <CreativeWorks />
           <FAQ />
           <Contact />
           <Footer />
@@ -109,6 +110,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/case-study/:id" element={<CaseStudyDetail />} />
+        <Route path="/creative-work/:id" element={<CreativeWorkDetail />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin/dashboard"

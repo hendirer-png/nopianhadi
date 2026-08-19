@@ -43,7 +43,10 @@ const Header: React.FC = () => {
         {/* Navigation Menu */}
         <nav className="hidden md:flex items-center gap-8">
           <a href="#work" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-            Karya
+            Karya Web
+          </a>
+          <a href="#creative-works" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
+            Desain & Video
           </a>
           <a href="#skills" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
             Keahlian

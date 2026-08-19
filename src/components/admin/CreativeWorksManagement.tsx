@@ -15,10 +15,11 @@ const CreativeWorksManagement: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingGallery, setIsUploadingGallery] = useState(false);
   const [editingWork, setEditingWork] = useState<CreativeWork | null>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [formData, setFormData] = useState<Partial<CreativeWork>>({
-    title: '', category: 'Design', image: '', video_url: '', status: 'Published'
+    title: '', category: 'Design', image: '', images: [], video_url: '', status: 'Published'
   });
 
   useEffect(() => { fetchWorks(); }, []);
@@ -53,7 +54,7 @@ const CreativeWorksManagement: React.FC = () => {
 
   const openModal = (work?: CreativeWork) => {
     if (work) { setEditingWork(work); setFormData(work); }
-    else { setEditingWork(null); setFormData({ title: '', category: 'Design', image: '', video_url: '', status: 'Published' }); }
+    else { setEditingWork(null); setFormData({ title: '', category: 'Design', image: '', images: [], video_url: '', status: 'Published' }); }
     setIsModalOpen(true);
   };
 
@@ -89,6 +90,32 @@ const CreativeWorksManagement: React.FC = () => {
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    
+    try {
+      setIsUploadingGallery(true);
+      const urls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const url = await storageApi.uploadImage(files[i], 'creative-works/gallery/');
+        urls.push(url);
+      }
+      setFormData(prev => ({ ...prev, images: [...(prev.images || []), ...urls] }));
+      setToast({ message: `${files.length} gambar berhasil diunggah!`, type: 'success' });
+    } catch (error) {
+      setToast({ message: 'Gagal mengunggah galeri gambar.', type: 'error' });
+    } finally {
+      setIsUploadingGallery(false);
+    }
+  };
+
+  const removeGalleryImage = (index: number) => {
+    const newImages = [...(formData.images || [])];
+    newImages.splice(index, 1);
+    setFormData(prev => ({ ...prev, images: newImages }));
   };
 
   return (
@@ -234,6 +261,31 @@ const CreativeWorksManagement: React.FC = () => {
                   <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
                 </div>
               )}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Upload Galeri Gambar (Bisa Pilih Banyak)</label>
+                <div className="flex items-center gap-4 mb-4">
+                  <input type="file" accept="image/*" multiple
+                    onChange={handleGalleryUpload}
+                    disabled={isUploadingGallery}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 transition-all cursor-pointer"
+                  />
+                  {isUploadingGallery && <Loader2 className="w-5 h-5 text-red-500 animate-spin" />}
+                </div>
+                {formData.images && formData.images.length > 0 && (
+                  <div className="grid grid-cols-4 gap-3">
+                    {formData.images.map((img, idx) => (
+                      <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-gray-200 group">
+                        <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <button type="button" onClick={() => removeGalleryImage(idx)} className="p-2 bg-red-600 text-white rounded-full hover:scale-110 transition-transform">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
                   URL Video <span className="text-gray-400 font-normal">(Opsional)</span>
