@@ -4,6 +4,7 @@ import { PlayCircle } from 'lucide-react';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { creativeWorksApi } from '../lib/api/creativeWorks';
 import { CreativeWork } from '../lib/supabase';
+import { getVideoThumbnail } from '../utils/videoUtils';
 
 const CreativeWorks: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +21,16 @@ const CreativeWorks: React.FC = () => {
   }, []);
 
   const filtered = works.filter(w => activeFilter === 'All' || w.category === activeFilter);
+
+  // Helper: prioritas work.image → auto YouTube thumbnail
+  const getThumbSrc = (work: CreativeWork): string => {
+    if (work.image) return work.image;
+    if (work.video_url) {
+      const yt = getVideoThumbnail(work.video_url);
+      if (yt) return yt;
+    }
+    return '';
+  };
 
   // if (!loading && works.length === 0) return null;
 
@@ -46,11 +57,10 @@ const CreativeWorks: React.FC = () => {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                activeFilter === filter
+              className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeFilter === filter
                   ? 'bg-gray-900 text-white shadow-lg'
                   : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-200'
-              }`}
+                }`}
             >
               {filter === 'All' ? 'Semua' : filter === 'Design' ? 'Desain Grafis' : 'Video Editing'}
             </button>
@@ -77,12 +87,22 @@ const CreativeWorks: React.FC = () => {
                 style={{ transitionDelay: `${index * 60}ms` }}
                 onClick={() => navigate(`/creative-work/${work.id}`)}
               >
-                <img
-                  src={work.image}
-                  alt={work.title}
-                  className="w-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                  loading="lazy"
-                />
+                {/* Gambar: upload admin atau thumbnail otomatis YouTube */}
+                {(() => {
+                  const src = getThumbSrc(work);
+                  return src ? (
+                    <img
+                      src={src}
+                      alt={work.title}
+                      className="w-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="aspect-video bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                      <PlayCircle className="w-10 h-10 text-gray-400" />
+                    </div>
+                  );
+                })()}
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
                   {work.video_url && (

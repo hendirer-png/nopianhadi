@@ -3,8 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { creativeWorksApi } from '../lib/api/creativeWorks';
 import { CreativeWork } from '../lib/supabase';
-import { PlayCircle, ExternalLink } from 'lucide-react';
-import { getVideoEmbedUrl } from '../utils/videoUtils';
+import { PlayCircle, ExternalLink, Image as ImageIcon, Film } from 'lucide-react';
+import { getVideoEmbedUrl, getVideoThumbnail } from '../utils/videoUtils';
+
+type ActiveTab = 'thumbnail' | 'video';
 
 const CreativeWorkDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,7 +14,8 @@ const CreativeWorkDetail: React.FC = () => {
   const [work, setWork] = useState<CreativeWork | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showVideo, setShowVideo] = useState(false);
+  const [activeTab, setActiveTab] = useState<ActiveTab>('thumbnail');
+  const [thumbnailError, setThumbnailError] = useState(false);
 
   useEffect(() => {
     const fetchWork = async () => {
@@ -31,6 +34,9 @@ const CreativeWorkDetail: React.FC = () => {
           setError('Karya tidak ditemukan');
         } else {
           setWork(data);
+          console.log('✅ Creative Work loaded:', data);
+          console.log('🎬 video_url:', data.video_url);
+          console.log('🖼 image:', data.image);
         }
       } catch (error) {
         console.error('❌ Failed to fetch creative work:', error);
@@ -118,86 +124,160 @@ const CreativeWorkDetail: React.FC = () => {
 
         {/* Main Content Area */}
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-12">
-          {/* Main Image or Video */}
+
+          {/* Tab Navigation — hanya tampil jika ada video */}
+          {work.video_url && (
+            <div className="flex border-b border-gray-100">
+              <button
+                onClick={() => setActiveTab('thumbnail')}
+                className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-semibold transition-all duration-200 ${activeTab === 'thumbnail'
+                    ? 'text-gray-900 border-b-2 border-gray-900 bg-gray-50'
+                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                  }`}
+              >
+                <ImageIcon className="w-4 h-4" />
+                Thumbnail
+              </button>
+              <button
+                onClick={() => setActiveTab('video')}
+                className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-semibold transition-all duration-200 ${activeTab === 'video'
+                    ? 'text-red-600 border-b-2 border-red-500 bg-red-50'
+                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                  }`}
+              >
+                <Film className="w-4 h-4" />
+                Putar Video
+              </button>
+            </div>
+          )}
+
+          {/* Content Area */}
           <div className="relative">
-            {work.video_url && showVideo ? (
-              // Video Embed
-              <div className="aspect-video">
-                {getVideoEmbedUrl(work.video_url) ? (
-                  <iframe
-                    src={getVideoEmbedUrl(work.video_url)!}
-                    title={work.title}
-                    className="w-full h-full"
-                    frameBorder="0"
-                    allowFullScreen
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  />
-                ) : (
-                  // Fallback for invalid video URLs
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                    <div className="text-center">
-                      <p className="text-gray-500 mb-4">Video tidak dapat dimuat</p>
-                      <a
-                        href={work.video_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-red-700 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Buka Video
-                      </a>
+
+            {/* ── TAB: THUMBNAIL (atau gambar biasa jika tidak ada video) ── */}
+            {(!work.video_url || activeTab === 'thumbnail') && (() => {
+              // Prioritas: work.image (upload admin) → YouTube auto-thumbnail
+              const ytThumb = work.video_url ? getVideoThumbnail(work.video_url) : null;
+              const imgSrc = work.image || (ytThumb && !thumbnailError ? ytThumb : '');
+              const isYtThumb = !work.image && !!ytThumb && !thumbnailError;
+
+              return (
+                <div className="relative">
+                  {imgSrc ? (
+                    <>
+                      <img
+                        src={imgSrc}
+                        alt={work.title}
+                        className="w-full object-cover"
+                        onError={() => { if (isYtThumb) setThumbnailError(true); }}
+                      />
+                      {/* Play button overlay jika ada video */}
+                      {work.video_url && (
+                        <button
+                          onClick={() => setActiveTab('video')}
+                          className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 hover:bg-black/35 transition-colors group"
+                          aria-label="Putar video"
+                        >
+                          <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 transition-transform shadow-2xl">
+                            <PlayCircle className="w-10 h-10 text-white fill-white/40" />
+                          </div>
+                          <span className="mt-3 text-white text-xs font-semibold bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full">
+                            Klik untuk memutar video
+                          </span>
+                        </button>
+                      )}
+                      {/* Label sumber thumbnail */}
+                      {isYtThumb && (
+                        <div className="absolute top-3 left-3">
+                          <span className="text-[10px] font-semibold bg-black/50 text-white px-2.5 py-1 rounded-full backdrop-blur-sm">
+                            Thumbnail dari YouTube
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="aspect-video bg-gray-100 flex items-center justify-center">
+                      <div className="text-center text-gray-400">
+                        <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-40" />
+                        <p className="text-sm">Tidak ada gambar tersedia</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              // Image with Play Button Overlay
-              <>
-                <img src={work.image} alt={work.title} className="w-full object-cover" />
-                
-                {/* Video Play Button Overlay */}
-                {work.video_url && (
-                  <button
-                    onClick={() => setShowVideo(true)}
-                    className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors group"
-                  >
-                    <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50 group-hover:scale-110 transition-transform shadow-2xl">
-                      <PlayCircle className="w-10 h-10 text-white fill-white/40" />
+                  )}
+                </div>
+              );
+            })()}
+
+            {/* ── TAB: VIDEO ── */}
+            {work.video_url && activeTab === 'video' && (() => {
+              const rawEmbed = getVideoEmbedUrl(work.video_url);
+              // Tambahkan autoplay=1 agar langsung putar saat tab diklik
+              const autoplayEmbed = rawEmbed
+                ? rawEmbed.includes('?')
+                  ? rawEmbed + '&autoplay=1'
+                  : rawEmbed + '?autoplay=1'
+                : null;
+              return (
+                <div className="aspect-video bg-black">
+                  {autoplayEmbed ? (
+                    <iframe
+                      key={autoplayEmbed}
+                      src={autoplayEmbed}
+                      title={work.title}
+                      className="w-full h-full"
+                      frameBorder="0"
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-900">
+                      <div className="text-center">
+                        <p className="text-gray-400 mb-4 text-sm">Format video tidak dikenali.</p>
+                        <p className="text-gray-500 text-xs mb-4">{work.video_url}</p>
+                        <a
+                          href={work.video_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-red-700 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Buka di YouTube
+                        </a>
+                      </div>
                     </div>
-                  </button>
-                )}
-              </>
-            )}
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
-          {/* Video Controls */}
+          {/* Bottom action bar */}
           {work.video_url && (
-            <div className="p-6 md:p-8 flex flex-col sm:flex-row gap-4 justify-center items-center border-t border-gray-100">
-              {!showVideo ? (
+            <div className="p-5 md:p-6 flex flex-col sm:flex-row gap-3 justify-center items-center border-t border-gray-100 bg-gray-50/50">
+              {activeTab === 'thumbnail' ? (
                 <button
-                  onClick={() => setShowVideo(true)}
-                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25 hover:scale-105 transform duration-200"
+                  onClick={() => setActiveTab('video')}
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-7 py-3 rounded-full text-sm font-bold hover:bg-blue-700 transition-all hover:scale-105 shadow-lg shadow-blue-500/25"
                 >
-                  <PlayCircle className="w-5 h-5" />
+                  <PlayCircle className="w-4 h-4" />
                   Putar Video di Sini
                 </button>
               ) : (
                 <button
-                  onClick={() => setShowVideo(false)}
-                  className="inline-flex items-center gap-2 bg-gray-600 text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-gray-700 transition-colors shadow-lg shadow-gray-500/25 hover:scale-105 transform duration-200"
+                  onClick={() => setActiveTab('thumbnail')}
+                  className="inline-flex items-center gap-2 bg-gray-600 text-white px-7 py-3 rounded-full text-sm font-bold hover:bg-gray-700 transition-all hover:scale-105 shadow-lg shadow-gray-500/25"
                 >
-                  Tampilkan Gambar
+                  <ImageIcon className="w-4 h-4" />
+                  Lihat Thumbnail
                 </button>
               )}
-              
               <a
                 href={work.video_url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 bg-red-600 text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-red-700 transition-colors shadow-lg shadow-red-500/25 hover:scale-105 transform duration-200"
+                className="inline-flex items-center gap-2 bg-red-600 text-white px-7 py-3 rounded-full text-sm font-bold hover:bg-red-700 transition-all hover:scale-105 shadow-lg shadow-red-500/25"
               >
-                <ExternalLink className="w-5 h-5" />
-                Buka di Tab Baru
+                <ExternalLink className="w-4 h-4" />
+                Buka di YouTube
               </a>
             </div>
           )}
@@ -210,11 +290,11 @@ const CreativeWorkDetail: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {work.images.map((img, idx) => (
                 <div key={idx} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                  <img 
-                    src={img} 
-                    alt={`${work.title} - Gallery ${idx + 1}`} 
-                    className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-500" 
-                    loading="lazy" 
+                  <img
+                    src={img}
+                    alt={`${work.title} - Gallery ${idx + 1}`}
+                    className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-500"
+                    loading="lazy"
                   />
                 </div>
               ))}
