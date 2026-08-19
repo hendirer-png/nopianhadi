@@ -1,0 +1,349 @@
+@import "tailwindcss";
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Offset untuk fixed header */
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #F6F6F6;
+    font-weight: 400;
+    line-height: 1.6;
+    font-size: 13px; /* Base font size lebih kecil untuk mobile */
+    overflow-x: hidden; /* Mencegah horizontal scroll */
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 16px; /* Normal size untuk tablet+ */
+    }
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  }
+}
+
+@layer utilities {
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slideInLeft {
+    animation: slideInLeft 0.6s ease-out forwards;
+  }
+
+  .animate-slideInRight {
+    animation: slideInRight 0.6s ease-out forwards;
+  }
+
+  /* Typography Utilities - Plus Jakarta Sans */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  /* Heading sizes untuk mobile */
+  h1 {
+    font-size: 1.5rem; /* 24px */
+  }
+
+  h2 {
+    font-size: 1.25rem; /* 20px */
+  }
+
+  h3 {
+    font-size: 1.125rem; /* 18px */
+  }
+
+  h4 {
+    font-size: 1rem; /* 16px */
+  }
+
+  h5 {
+    font-size: 0.875rem; /* 14px */
+  }
+
+  h6 {
+    font-size: 0.813rem; /* 13px */
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 2.5rem; /* 40px */
+    }
+
+    h2 {
+      font-size: 2rem; /* 32px */
+    }
+
+    h3 {
+      font-size: 1.75rem; /* 28px */
+    }
+
+    h4 {
+      font-size: 1.5rem; /* 24px */
+    }
+
+    h5 {
+      font-size: 1.25rem; /* 20px */
+    }
+
+    h6 {
+      font-size: 1rem; /* 16px */
+    }
+  }
+
+  /* Hero Title: text-4xl md:text-5xl lg:text-6xl */
+  .hero-title {
+    font-size: 1.5rem; /* 24px - lebih kecil untuk mobile */
+    font-weight: 800;
+  }
+
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: 3rem; /* 48px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-title {
+      font-size: 3.75rem; /* 60px */
+    }
+  }
+
+  /* Section Titles: text-3xl md:text-4xl lg:text-5xl */
+  .section-title {
+    font-size: 1.25rem; /* 20px - lebih kecil untuk mobile */
+    font-weight: 700;
+  }
+
+  @media (min-width: 768px) {
+    .section-title {
+      font-size: 2.25rem; /* 36px */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section-title {
+      font-size: 3rem; /* 48px */
+    }
+  }
+
+  /* Body Text */
+  p {
+    line-height: 1.5;
+    font-weight: 400;
+    font-size: 0.813rem; /* 13px - lebih kecil untuk mobile */
+  }
+
+  @media (min-width: 768px) {
+    p {
+      font-size: 1rem; /* 16px untuk tablet+ */
+      line-height: 1.7;
+    }
+  }
+
+  /* Utility classes for consistent sizing */
+  .text-body-lg {
+    font-size: 0.938rem; /* 15px untuk mobile */
+  }
+
+  @media (min-width: 768px) {
+    .text-body-lg {
+      font-size: 1.125rem; /* 18px */
+    }
+  }
+
+  .text-body {
+    font-size: 0.813rem; /* 13px untuk mobile */
+  }
+
+  @media (min-width: 768px) {
+    .text-body {
+      font-size: 1rem; /* 16px */
+    }
+  }
+
+  .text-body-sm {
+    font-size: 0.75rem; /* 12px untuk mobile */
+  }
+
+  @media (min-width: 768px) {
+    .text-body-sm {
+      font-size: 0.875rem; /* 14px */
+    }
+  }
+
+  .text-body-xs {
+    font-size: 0.688rem; /* 11px untuk mobile */
+  }
+
+  @media (min-width: 768px) {
+    .text-body-xs {
+      font-size: 0.75rem; /* 12px */
+    }
+  }
+}
+
+  /* Mobile-specific utilities */
+  @media (max-width: 767px) {
+    /* Reduce padding and margins on mobile */
+    .container {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+    }
+
+    /* Smaller buttons on mobile */
+    button, .btn {
+      font-size: 0.813rem !important; /* 13px */
+      padding: 0.5rem 1rem !important;
+    }
+
+    /* Smaller input fields */
+    input, textarea, select {
+      font-size: 0.813rem !important; /* 13px */
+      padding: 0.5rem !important;
+    }
+
+    /* Smaller cards and sections */
+    .card, section {
+      padding: 1rem !important;
+    }
+
+    /* Smaller icons */
+    svg, img.icon {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+    }
+
+    /* Reduce gap between elements */
+    .gap-6 {
+      gap: 1rem !important;
+    }
+
+    .gap-8 {
+      gap: 1.25rem !important;
+    }
+
+    .gap-12 {
+      gap: 1.5rem !important;
+    }
+
+    /* Smaller spacing */
+    .space-y-6 > * + * {
+      margin-top: 1rem !important;
+    }
+
+    .space-y-8 > * + * {
+      margin-top: 1.25rem !important;
+    }
+
+    .space-y-12 > * + * {
+      margin-top: 1.5rem !important;
+    }
+  }
+
+  /* Global mobile text size overrides */
+  @media (max-width: 767px) {
+    /* Override all large text sizes for mobile */
+    .text-3xl {
+      font-size: 1.25rem !important; /* 20px */
+    }
+
+    .text-4xl {
+      font-size: 1.5rem !important; /* 24px */
+    }
+
+    .text-5xl {
+      font-size: 1.75rem !important; /* 28px */
+    }
+
+    .text-6xl {
+      font-size: 2rem !important; /* 32px */
+    }
+
+    .text-2xl {
+      font-size: 1.125rem !important; /* 18px */
+    }
+
+    .text-xl {
+      font-size: 1rem !important; /* 16px */
+    }
+
+    .text-lg {
+      font-size: 0.938rem !important; /* 15px */
+    }
+
+    /* Reduce padding for sections */
+    section {
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+    }
+
+    /* Smaller max-width containers */
+    .max-w-7xl,
+    .max-w-6xl,
+    .max-w-5xl,
+    .max-w-4xl {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
