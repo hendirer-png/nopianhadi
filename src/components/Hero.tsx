@@ -18,10 +18,10 @@ const Hero: React.FC = () => {
       </div>
       <div className="mt-auto space-y-1.5 sm:space-y-3">
         <div className="h-1 sm:h-2 w-full bg-white/20 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-400 w-3/4 rounded-full animate-pulse"></div>
+          <div className="h-full bg-blue-400 w-3/4 rounded-full animate-pulse"></div>
         </div>
         <div className="h-1 sm:h-2 w-full bg-white/20 rounded-full overflow-hidden">
-            <div className="h-full bg-purple-400 w-1/2 rounded-full animate-pulse" style={{ animationDelay: '500ms' }}></div>
+          <div className="h-full bg-purple-400 w-1/2 rounded-full animate-pulse" style={{ animationDelay: '500ms' }}></div>
         </div>
       </div>
     </div>,
@@ -29,7 +29,7 @@ const Hero: React.FC = () => {
     /* Card 2 */
     <div key="card2" className="card-float-2 w-32 h-32 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-[0.85rem] sm:rounded-3xl bg-white/80 backdrop-blur-md p-3 sm:p-6 flex flex-col relative shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300">
       <div className="text-left text-gray-800 relative z-10">
-        <h3 className="text-[11px] sm:text-xl font-bold leading-tight">Intelligence in<br/>Every Decision</h3>
+        <h3 className="text-[11px] sm:text-xl font-bold leading-tight">Intelligence in<br />Every Decision</h3>
       </div>
       <div className="mt-auto flex items-end gap-1 sm:gap-2 h-12 sm:h-24 relative z-10">
         <div className="w-1/4 bg-blue-200 h-1/3 rounded-t-sm hover:h-1/2 transition-all duration-300"></div>
@@ -41,21 +41,21 @@ const Hero: React.FC = () => {
 
     /* Card 3 (Center - Focus) */
     <div key="card3" className="card-float-3 w-32 h-32 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-[0.85rem] sm:rounded-3xl bg-white backdrop-blur-md flex items-center justify-center relative shadow-2xl overflow-hidden border-[2px] sm:border-4 border-white/20 p-2 sm:p-4 hover:scale-105 transition-transform duration-300">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-green-100 opacity-50 animate-pulse"></div>
-        <div className="relative z-10 space-y-1.5 sm:space-y-4 w-full">
-          <div className="bg-white rounded-full py-1 px-2 sm:py-2 sm:px-4 shadow-sm flex items-center gap-1.5 sm:gap-3 hover:-translate-y-1 transition-transform duration-300">
-            <div className="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-blue-500 flex items-center justify-center">
-                <span className="text-[6px] sm:text-[10px] text-white">Cal</span>
-            </div>
-            <span className="text-[8px] sm:text-xs font-medium text-gray-600">Calendar</span>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-green-100 opacity-50 animate-pulse"></div>
+      <div className="relative z-10 space-y-1.5 sm:space-y-4 w-full">
+        <div className="bg-white rounded-full py-1 px-2 sm:py-2 sm:px-4 shadow-sm flex items-center gap-1.5 sm:gap-3 hover:-translate-y-1 transition-transform duration-300">
+          <div className="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-blue-500 flex items-center justify-center">
+            <span className="text-[6px] sm:text-[10px] text-white">Cal</span>
           </div>
-          <div className="bg-white rounded-full py-1 px-2 sm:py-2 sm:px-4 shadow-sm flex items-center gap-1.5 sm:gap-3 w-4/5 ml-auto hover:-translate-y-1 transition-transform duration-300">
-            <div className="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-green-500 flex items-center justify-center">
-                <span className="text-[6px] sm:text-[10px] text-white">Msg</span>
-            </div>
-            <span className="text-[8px] sm:text-xs font-medium text-gray-600">Messages</span>
-          </div>
+          <span className="text-[8px] sm:text-xs font-medium text-gray-600">Calendar</span>
         </div>
+        <div className="bg-white rounded-full py-1 px-2 sm:py-2 sm:px-4 shadow-sm flex items-center gap-1.5 sm:gap-3 w-4/5 ml-auto hover:-translate-y-1 transition-transform duration-300">
+          <div className="w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-green-500 flex items-center justify-center">
+            <span className="text-[6px] sm:text-[10px] text-white">Msg</span>
+          </div>
+          <span className="text-[8px] sm:text-xs font-medium text-gray-600">Messages</span>
+        </div>
+      </div>
     </div>,
 
     /* Card 4 */
@@ -69,10 +69,10 @@ const Hero: React.FC = () => {
         <p className="text-[8px] sm:text-xs text-gray-500">Running tasks</p>
       </div>
       <div className="mt-auto grid grid-cols-2 gap-0.5 sm:gap-2">
-          <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Strategic</div>
-          <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Processed</div>
-          <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Grow Faster</div>
-          <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Build Smart</div>
+        <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Strategic</div>
+        <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Processed</div>
+        <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Grow Faster</div>
+        <div className="bg-gray-100 py-0.5 px-1 sm:py-1.5 sm:px-2 rounded text-[7px] sm:text-[10px] text-gray-600 font-medium text-center hover:bg-gray-200 transition-colors">Build Smart</div>
       </div>
     </div>,
 
@@ -93,22 +93,22 @@ const Hero: React.FC = () => {
   ];
 
   return (
-    <section 
+    <section
       className="relative flex items-center justify-center overflow-hidden min-h-[100vh] md:min-h-[800px] lg:min-h-[1080px] bg-cover bg-center bg-no-repeat pt-32 md:pt-40 pb-16"
       style={{ backgroundImage: 'url("/images/hiro.avif")' }}
     >
       <div className={`w-full max-w-[1920px] mx-auto text-center relative z-10 transition-all duration-700 ease-out flex flex-col items-center mt-12 md:mt-0 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
 
         <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold tracking-tight leading-tight max-w-5xl mx-auto text-white drop-shadow-md px-4">
-          Solusi Kreatif Digital <br />
+          CV. Nopian Hadi <br />
           Website, Desain & Video <br />
           <span className="text-white/80 font-light text-xl md:text-4xl lg:text-5xl block mt-2 md:mt-4">Portofolio Profesional Saya</span>
         </h1>
-        
+
         <p className="mt-4 md:mt-8 text-sm md:text-lg lg:text-xl text-gray-100 max-w-3xl mx-auto font-light tracking-wide drop-shadow px-4">
           Menghadirkan karya terbaik dalam pembuatan website modern, desain grafis <br className="hidden md:block" />yang memukau, dan pengeditan video profesional untuk kebutuhan Anda.
         </p>
-        
+
         <div className="mt-6 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 px-4 w-full max-w-md mx-auto sm:max-w-none">
           <a href="#" className="w-full sm:w-auto bg-[#D4FF3F] text-gray-900 font-medium px-8 py-3.5 rounded-full text-sm md:text-base hover:bg-[#c2f02e] transition-colors duration-300">
             Mulai Sekarang
@@ -130,8 +130,8 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Marquee Glassmorphism Cards Section */}
-        <div 
-          className="mt-12 md:mt-32 w-full overflow-hidden" 
+        <div
+          className="mt-12 md:mt-32 w-full overflow-hidden"
           style={{
             maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
             WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'

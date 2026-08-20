@@ -36,8 +36,8 @@ const SelectedWork: React.FC = () => {
     fetchProjects();
   }, []);
 
-  const filteredProjects = selectedCategory === 'Semua' 
-    ? projects 
+  const filteredProjects = selectedCategory === 'Semua'
+    ? projects
     : projects.filter(project => project.category === selectedCategory);
 
   // Tampilkan hanya 6 project pertama jika showAll = false
@@ -67,8 +67,8 @@ const SelectedWork: React.FC = () => {
         <div className="text-center">
           <div className="text-red-500 text-xl mb-4">⚠️</div>
           <p className="text-gray-600">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="mt-4 px-6 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800"
           >
             Refresh Halaman
@@ -85,7 +85,7 @@ const SelectedWork: React.FC = () => {
       <Floating3DIcon position="left" iconType="alt" />
       <div className="w-full max-w-[1920px] mx-auto px-4 md:px-8 lg:px-16 xl:px-24 relative z-10">
         <div className={`text-center mb-6 md:mb-12 transition-all duration-600 ease-out ${shouldShow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">Portofolio Project Saya</h2>
+          <h2 className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight">Portofolio Website Saya</h2>
           <p className="text-gray-500 text-xs md:text-base mt-1 md:mt-2">[2022 - 2025]</p>
         </div>
 
@@ -95,11 +95,10 @@ const SelectedWork: React.FC = () => {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-3 py-1.5 md:px-6 md:py-2.5 rounded-full text-[10px] md:text-sm font-medium transition-all duration-300 ${
-                selectedCategory === category
+              className={`px-3 py-1.5 md:px-6 md:py-2.5 rounded-full text-[10px] md:text-sm font-medium transition-all duration-300 ${selectedCategory === category
                   ? 'bg-gray-900 text-white shadow-lg scale-105'
                   : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-900 hover:text-gray-900'
-              }`}
+                }`}
             >
               {category}
             </button>
@@ -122,9 +121,9 @@ const SelectedWork: React.FC = () => {
               <div className="relative h-full w-full rounded-lg md:rounded-xl bg-white overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-200 transition-all duration-300 ease-out group-hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] group-hover:-translate-y-1">
                 {/* Image container dengan aspect ratio konsisten */}
                 <div className="relative w-full aspect-[4/3] overflow-hidden bg-gray-50">
-                  <img 
-                    src={project.hero_image || PLACEHOLDER_IMAGES.project} 
-                    alt={project.title} 
+                  <img
+                    src={project.hero_image || PLACEHOLDER_IMAGES.project}
+                    alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     onError={(e) => handleImageError(e, 'project')}
                   />
@@ -141,10 +140,10 @@ const SelectedWork: React.FC = () => {
 
                   {/* Title */}
                   <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-1 md:mb-3 group-hover:text-red-600 transition-colors line-clamp-2">{project.title}</h3>
-                  
+
                   {/* Overview */}
                   <p className="text-[11px] md:text-base text-gray-600 line-clamp-2 leading-relaxed mb-3 md:mb-4">{project.overview}</p>
-                  
+
                   {/* Role & Duration */}
                   <div className="flex items-center gap-2 md:gap-4 mb-3 md:mb-4 text-[10px] md:text-sm">
                     <div className="flex items-center gap-1 md:gap-1.5">
@@ -161,12 +160,12 @@ const SelectedWork: React.FC = () => {
                       <span className="text-gray-700 font-medium">{project.duration}</span>
                     </div>
                   </div>
-                  
+
                   {/* Technologies tags */}
                   <div className="flex flex-wrap gap-1.5 md:gap-2 mb-3 md:mb-4">
                     {project.technologies && project.technologies.slice(0, 4).map((tech) => (
-                      <span 
-                        key={tech} 
+                      <span
+                        key={tech}
                         className="text-[9px] md:text-xs px-2 py-1 md:px-3 md:py-1.5 bg-gray-100 text-gray-700 rounded-full font-medium"
                       >
                         {tech}
@@ -205,7 +204,7 @@ const SelectedWork: React.FC = () => {
         {/* Tombol Lihat Lebih Banyak - hanya tampil jika ada lebih dari 6 project */}
         {filteredProjects.length > 6 && (
           <div className={`flex justify-center mt-6 md:mt-12 transition-all duration-600 ease-out ${shouldShow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
-            <button 
+            <button
               onClick={() => setShowAll(!showAll)}
               className="inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-5 py-2.5 md:px-8 md:py-4 text-xs md:text-base rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:bg-gray-800"
             >

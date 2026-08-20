@@ -12,6 +12,7 @@ const CreativeWorks: React.FC = () => {
   const [works, setWorks] = useState<CreativeWork[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<'All' | 'Design' | 'Video'>('All');
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     creativeWorksApi.getPublished()
@@ -21,6 +22,7 @@ const CreativeWorks: React.FC = () => {
   }, []);
 
   const filtered = works.filter(w => activeFilter === 'All' || w.category === activeFilter);
+  const displayedWorks = showAll ? filtered : filtered.slice(0, 8); // Tampilkan 8 item awal
 
   // Helper: prioritas work.image → auto YouTube thumbnail
   const getThumbSrc = (work: CreativeWork): string => {
@@ -80,7 +82,7 @@ const CreativeWorks: React.FC = () => {
           </div>
         ) : (
           <div className="columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4 space-y-3 md:space-y-4">
-            {filtered.map((work, index) => (
+            {displayedWorks.map((work, index) => (
               <div
                 key={work.id}
                 className={`break-inside-avoid group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 ease-out ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
@@ -121,6 +123,21 @@ const CreativeWorks: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Tombol Lihat Lebih Banyak - hanya tampil jika ada lebih dari 8 karya */}
+        {!loading && filtered.length > 8 && (
+          <div className={`flex justify-center mt-10 md:mt-12 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-5 py-2.5 md:px-8 md:py-4 text-xs md:text-base rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:bg-gray-800"
+            >
+              {showAll ? 'Lihat Lebih Sedikit' : 'Lihat Lebih Banyak'}
+              <svg className={`w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
           </div>
         )}
       </div>
